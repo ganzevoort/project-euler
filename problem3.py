@@ -9,4 +9,4 @@ from primes import prime_divisors
 
 def solution():
     N = 600851475143
-    return prime_divisors(N)[-1]
+    return list(prime_divisors(N))[-1]

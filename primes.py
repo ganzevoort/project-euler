@@ -98,22 +98,20 @@ def lcm(x, y):
     return x * y / gcd(x,y)
 
 def prime_divisors(n):
-    divisors = []
     for p in get_primes():
-        if p > n:
-            return divisors
+        if p > math.sqrt(n):
+            if n > 1:
+                yield n
+            return
         while n % p == 0:
-            divisors.append(p)
+            yield p
             n /= p
 
 def divisors(n):
     divisors = set([1])
-    for p in get_primes():
-        if p > n:
-            return sorted(divisors)
-        while n % p == 0:
-            divisors.update([p*d for d in divisors])
-            n /= p
+    for p in prime_divisors(n):
+        divisors.update([p*d for d in divisors])
+    return sorted(divisors)
 
 
 if __name__=='__main__':
