@@ -29,10 +29,11 @@ def is_abundant(n):
 def solution():
     N = 28123
     abundant_numbers = filter(is_abundant, xrange(12, N))
-    candidates = set(xrange(1,N+1))
-    for i,a in enumerate(abundant_numbers):
-        for b in abundant_numbers[i:]:
-            if a+b > N:
-                break
-            candidates.discard(a+b)
-    return sum(candidates)
+    abundant_set = set(abundant_numbers)
+    def is_sum_of_two(c):
+        for a in abundant_numbers:
+            if a >= c:  # c cannot be written as the sum of two abundant numbers
+                return False
+            if c-a in abundant_set:
+                return True
+    return sum(c for c in xrange(1,N+1) if not is_sum_of_two(c))
