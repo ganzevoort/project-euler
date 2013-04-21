@@ -88,10 +88,8 @@ get_primes = _factory.get_primes
 
 
 def gcd(x, y):
-    if x > y:
-        x, y = y, x
-    while y % x != 0:
-        x, y = y % x, x
+    while y:
+        x, y = y, x % y
     return x
 
 def lcm(x, y):
