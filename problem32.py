@@ -18,19 +18,22 @@ import itertools
 
 def solution():
     digits = '123456789'
+    products = set()
+    def check(A,B):
+        C = A * B
+        if ''.join(sorted(str(A) + str(B) + str(C))) == digits:
+            products.add(C)
+            #print '{} x {} = {}'.format(A, B, C)
+
     # A x B  = C
     # assume A < B
     # if len(A) >= 3 and len(B) >= 3 then len(C) >= 5, too long
     # same if len(A) >= 2 and len(B) >= 4 or len(A) >= 1 and len(B) >= 5
     # if len(A) <= 2 and len(B) <= 2 then len(C) <= 4, too short
     # same if len(A) <= 1 and len(B) <= 3
-    # so, len(A)==2 and len(B)==3, therefore len(C)==4.
-    products = set()
+    # so len(A)==1 and len(B)==4, therefore len(C)==4,
+    # or len(A)==2 and len(B)==3, therefore len(C)==4.
     for attempt in itertools.permutations(digits, 5):
-        A = int(''.join(attempt[:2]))
-        B = int(''.join(attempt[2:]))
-        C = A * B
-        if ''.join(sorted(str(C) + ''.join(attempt))) == digits:
-            products.add(C)
-            #print '{} x {} = {}'.format(A, B, C)
+        check(int(''.join(attempt[:1])), int(''.join(attempt[1:])))
+        check(int(''.join(attempt[:2])), int(''.join(attempt[2:])))
     return sum(products)
