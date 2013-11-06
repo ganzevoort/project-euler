@@ -29,5 +29,3 @@ def solution():
     #from pprint import pprint ; pprint(s)
     return max((len(v),k) for k,v in s.items())[1]
 
-print solution()
-

@@ -6,21 +6,33 @@ import sys
 import itertools
 
 
+def get_problems():
+    for n in itertools.count(1):
+        yield "problem{}".format(n)
+
+
 if __name__=='__main__':
     solutions = dict(('problem'+line.strip().replace(' ','')).split('.',1)
                      for line in file('solutions.txt')
                      if not line.startswith('#'))
+    total_duration = 0.0
     import time
-    args = sys.argv[1:] or ("problem{}".format(n) for n in itertools.count(1))
-    for arg in args:
+    args = []
+    for arg in sys.argv[1:] or get_problems():
         try:
             problem = __import__(arg, globals())
+            args.append(arg)
         except ImportError:
             break
         print "%12s" % arg,
         start = time.time()
         result = str(problem.solution())
-        end = time.time()
+        duration = time.time() - start
+        total_duration += duration
+
         status = 'OK' if result==solutions.get(arg) else 'WRONG'
-        print '%-6s%-32s %6dms' % (status, result, 1000*(end-start))
+        print '%-6s%-32s %6dms' % (status, result, 1000*duration)
+    if len(args) > 1:
+        print "%12s" % 'total',
+        print '%-6s%-32s %6dms' % ('', '', 1000*total_duration)
 

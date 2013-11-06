@@ -82,7 +82,7 @@ class PrimeFactory3(PrimeFactory2):
         return all(q % p != 0 for p in self.get_primes(int(math.sqrt(q))))
 
 
-_factory = PrimeFactory3()
+_factory = PrimeFactory2()
 is_prime = _factory.is_prime
 get_primes = _factory.get_primes
 
