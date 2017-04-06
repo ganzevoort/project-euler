@@ -19,6 +19,7 @@ Which starting number, under one million, produces the longest chain?
 NOTE: Once the chain starts the terms are allowed to go above one million.
 """
 
+
 def collatz_sequence(n):
     cs = [n]
     while n > 1:
@@ -29,19 +30,19 @@ def collatz_sequence(n):
         cs.append(n)
     return cs
 
-csl = {}
+
+csl = {1:1}
 def collatz_sequence_length(n):
-    if n == 1:
-        return 1
-    elif n in csl:
+    if n in csl:
         return csl[n]
-    elif n % 2 == 0:
-        length = 1 + collatz_sequence_length(n / 2)
+    elif n & 1:
+        # if n is odd, next step will be even for sure
+        length = 2 + collatz_sequence_length((3 * n + 1)/2)
     else:
-        length = 1 + collatz_sequence_length(3 * n + 1)
+        length = 1 + collatz_sequence_length(n / 2)
     csl[n] = length
     return length
 
-def solution():
-    N = 1000000
-    return max((collatz_sequence_length(n), n) for n in range(1,N))[1]
+
+def solution(N = 1000000):
+    return max(range(1,N), key=collatz_sequence_length)

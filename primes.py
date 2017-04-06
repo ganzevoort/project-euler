@@ -82,9 +82,16 @@ class PrimeFactory3(PrimeFactory2):
         return all(q % p != 0 for p in self.get_primes(int(math.sqrt(q))))
 
 
-_factory = PrimeFactory2()
+class PrimeFactory4(PrimeFactory2):
+    def prefetch(self, N):
+        while self.horizon < N:
+            self.fetch_one()
+
+
+_factory = PrimeFactory4()
 is_prime = _factory.is_prime
 get_primes = _factory.get_primes
+prefetch_primes = _factory.prefetch
 
 
 def gcd(x, y):

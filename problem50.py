@@ -21,33 +21,26 @@ class PrimeSequenceGenerator(object):
         self.N = N
         self.primes = list(get_primes(N))
 
-    def sequence(self, length):
-        for index in range(len(self.primes) + 1 - length):
-            sequence = self.primes[index : index + length]
-            value = sum(sequence)
-            if value >= self.N:
-                break
-            yield value
-
-    def find_a_value(self, length):
-        for value in self.sequence(length):
-            return value
-
-    def find_longest_sequence_value(self):
-        lwb, upb = 1, 2
-        while self.find_a_value(upb):
-            lwb = upb
-            upb *= 2
-        while upb != lwb+1:
-            length = (lwb + upb) / 2
-            if self.find_a_value(length):
-                lwb=length
-            else:
-                upb=length
-        for length in range(lwb, 1, -1):
-            for value in self.sequence(length):
-                if is_prime(value):
-                    return value
+    def find_longest_sequence_value(self, start=0, min_length=1, result=None):
+        """ result is best sofar, is sum(S) for some sequence S.
+        Try and find a longer sequence, so min_length is len(S)+1.
+        First try all sequences starting at start, then recurse with start+1.
+        """
+        subtotal = sum(self.primes[start : start + min_length])
+        if subtotal >= self.N:
+            # longer sequences starting at start or higher by definition yield
+            # out-of-range results, so we're done here.
+            return result
+        for length in itertools.count(min_length):
+            subtotal += self.primes[start+length]
+            if subtotal >= self.N:
+                # Can't find a better result at start, move up to start+1
+                return self.find_longest_sequence_value(
+                        start+1, min_length+1, result)
+            if is_prime(subtotal):
+                # Improvement: result=sum(S), length=len(S)
+                min_length = length
+                result = subtotal
 
 
 def solution():
