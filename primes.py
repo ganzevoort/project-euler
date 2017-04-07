@@ -104,7 +104,8 @@ def lcm(x, y):
 
 def prime_divisors(n):
     for p in get_primes():
-        if p > math.sqrt(n):
+        if p*p > n:     # `p*p > n` instead of `p > math.sqrt(n)`
+                        # cuts ~25% of running time of problem47
             if n > 1:
                 yield n
             return

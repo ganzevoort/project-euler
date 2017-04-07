@@ -14,7 +14,9 @@ prime value family.
 """
 
 
-from primes import is_prime, get_primes, prefetch_primes
+# I experimented with miller-rabin.is_prime, but for this problem
+# prefetch_primes wins
+from primes import is_prime, prefetch_primes
 
 
 def family(pattern):
