@@ -16,9 +16,9 @@ fac = dict((x,math.factorial(x)) for x in range(10))
 def combinations(length, prefix=[]):
     prefix_sum = sum(fac[d] for d in prefix)
     if len(prefix)==length:
-        if map(int, sorted(str(prefix_sum))) == prefix:
+        if list(map(int, sorted(str(prefix_sum)))) == prefix:
             return [prefix_sum]
-	return []
+        return []
     elif len(str(prefix_sum)) > length:
         return []
     elif len(str(prefix_sum + (length - len(prefix)) * fac[9])) < length:

@@ -41,10 +41,10 @@ def solution():
                         outn, outd = a, c
                     else:
                         continue
-                    #print '{}{}/{}{} = {}/{}'.format(a,b,c,d, outn,outd)
+                    #print('{}{}/{}{} = {}/{}'.format(a,b,c,d, outn,outd))
                     fractions.append((outn, outd))
-    #print fractions
-    n, d = map(mul,zip(*fractions))
+    #print(fractions)
+    n, d = list(map(mul,zip(*fractions)))
     g = gcd(n, d)
-    n, d = n/g, d/g
+    n, d = n // g, d // g
     return d

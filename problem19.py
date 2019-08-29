@@ -40,7 +40,7 @@ def months_starting_with_sundays_since_1900(end_year):
     first = 1
     for year in range(1900, end_year+1):
         for month in range(12):
-            #print "{} 1/{}/{}".format(day_name[first], month_name[month], year)
+            #print("{} 1/{}/{}".format(day_name[first], month_name[month], year))
             if first == 0:
                 count += 1
             first = (first + month_length(month, year)) % 7
@@ -48,3 +48,7 @@ def months_starting_with_sundays_since_1900(end_year):
 
 def solution():
     return months_starting_with_sundays_since_1900(2000) - months_starting_with_sundays_since_1900(1900)
+
+if __name__ == '__main__':
+    for i in range(1900,2001):
+        print('{} {}'.format(i, months_starting_with_sundays_since_1900(i)))

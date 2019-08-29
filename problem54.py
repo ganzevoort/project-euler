@@ -61,6 +61,8 @@ Colors: C H D S  # Note: I use colors where text above uses suits
 """
 
 from collections import defaultdict
+from functools import total_ordering
+from operator import itemgetter
 
 
 values = "AKQJT98765432"
@@ -78,6 +80,7 @@ straight_flush = 8
 royal_flush = 9
 
 
+@total_ordering
 class Card(object):
     def __init__(self, rep):
         self.rep = rep
@@ -90,28 +93,34 @@ class Card(object):
     def __str__(self):
         return self.rep
 
-    def __cmp__(self, other):
-        return cmp(values.index(other.value), values.index(self.value))
+    def __eq__(self, other):
+        return values.index(other.value) == values.index(self.value)
+
+    def __lt__(self, other):
+        return values.index(other.value) < values.index(self.value)
 
 
+@total_ordering
 class Hand(object):
 
     def __init__(self, input):
         self.cards = sorted((Card(rep) for rep in input), reverse=True)
         self.ranked = ''
 
-        self.by_value = defaultdict(list)
-        self.by_color = defaultdict(list)
+        by_value = defaultdict(list)
+        self.by_length = defaultdict(list)
         for card in self.cards:
-            self.by_value[card.value].append(card.color)
-            self.by_color[card.color].append(card.value)
-        self.by_length = sorted(
-                self.by_value.items(),
-                key=lambda (k,v): (len(v), -values.index(k)),
-                reverse=True)
-
+            by_value[card.value].append(card)
+        for card in self.cards:
+            same = by_value[card.value]
+            self.by_length[len(same)].append(card)
+        self.length_set = set(self.by_length.keys())
+        self.cards_by_length = [
+                card
+                for count,cards in sorted(self.by_length.items(), reverse=True)
+                for card in cards
+        ]
         self.ranked = self.rank()
-
 
     def __repr__(self):
         return "Hand('{}')".format("','".join(map(str, self.cards)))
@@ -119,57 +128,54 @@ class Hand(object):
     def __str__(self):
         return '{} - {}  '.format(' '.join(map(str, self.cards)), self.ranked)
 
-    def __cmp__(self, other):
-        return cmp(self.ranked, other.ranked)
+    def __eq__(self, other):
+        return self.ranked == other.ranked
+
+    def __lt__(self, other):
+        return self.ranked < other.ranked
 
     def is_high_card(self):
         "QC 7D 5H 8C 9S"
-        # self.by_length = [('Q', ['C']), ('7', ['D']),
-        #                   ('5', ['H']), ('8', ['C']), ('9', ['S'])]
-        if len(self.by_length)==5:
-            return [v[0] for v in self.by_length]   # ['Q', '9', '8', '7', '5']
+        if self.length_set == set([1]):
+            return self.cards
 
     def is_one_pair(self):
         "7C 7D 5H 8C 9S"
-        # self.by_length = [('7', ['C', 'D']),
-        #                   ('5', ['H']), ('8', ['C']), ('9', ['S'])]
-        if len(self.by_length)==4:
-            return [v[0] for v in self.by_length]   # ['7', '9', '8', '5']
+        # self.by_length = {2: ['7'], 1: ['9', '8', '5']}
+        if self.length_set == set([2,1]) and len(self.by_length[1])==3:
+            return self.cards_by_length
 
     def is_two_pair(self):
         "7C 7D 8H 8C 9S"
-        # self.by_length = [('7', ['C', 'D']), ('8', ['H', 'C']), ('9', ['S'])]
-        if len(self.by_length)==3 and len(self.by_length[0][1])==2:
-            return [v[0] for v in self.by_length]   # ['8', '7', '9']
+        # self.by_length = {2: ['8', '7'], 1: ['9']}
+        if self.length_set == set([2,1]) and len(self.by_length[1])==1:
+            return self.cards_by_length
 
     def is_three_of_a_kind(self):
         "7C 7D 7H 8C 9S"
-        # self.by_length = [('7', ['C', 'D', 'H']), ('8', ['C']), ('9', ['S'])]
-        if len(self.by_length)==3 and len(self.by_length[0][1])==3:
-            return [v[0] for v in self.by_length]   # ['7', '9', '8']
+        if self.length_set == set([3,1]):
+            return self.cards_by_length
 
     def is_straight(self):
         "KH QS JH TD 9C"
-        keys = [card.value for card in self.cards]
-        if len(keys)==5 and ''.join(keys) in values:
-            return keys
+        keys = ''.join(card.value for card in self.cards)
+        if len(keys)==5 and keys in values:
+            return self.cards
 
     def is_flush(self):
         "QH TH 9H 4H 2H"
-        if len(self.by_color)==1:
-            return self.by_color.values()[0]
+        if len(set(card.color for card in self.cards)) == 1:
+            return self.cards
 
     def is_full_house(self):
         "7C 7D 7H 8C 8S"
-        # self.by_length = [('7', ['C', 'D', 'H']), ('8', ['C', 'S'])]
-        if len(self.by_length)==2 and len(self.by_length[0][1])==3:
-            return [v[0] for v in self.by_length]   # ['7', '8']
+        if self.length_set == set([3,2]):
+            return self.cards_by_length
 
     def is_four_of_a_kind(self):
         "7C 7D 7H 7S 8S"
-        # self.by_length = [('7', ['C', 'D', 'H', 'S']), ('8', ['S'])]
-        if len(self.by_length)==2 and len(self.by_length[0][1])==4:
-            return [v[0] for v in self.by_length]   # ['7', '8']
+        if self.length_set == set([4,1]):
+            return self.cards_by_length
 
     def is_straight_flush(self):
         "KH QH JH TH 9H"
@@ -178,7 +184,7 @@ class Hand(object):
     def is_royal_flush(self):
         "AH KH QH JH TH"
         straight = self.is_straight_flush()
-        if straight and 'A' in straight:
+        if straight and self.cards[0].value == 'A':
             return straight
 
     def rank(self):
@@ -198,7 +204,7 @@ class Hand(object):
         for rank, method in reversed(list(enumerate(rank_methods))):
             is_rank = method()
             if is_rank:
-                return (rank, [-values.index(i) for i in is_rank], is_rank)
+                return (rank, is_rank)
 
 
 if __name__=='__main__':
@@ -206,8 +212,9 @@ if __name__=='__main__':
     for method_name, method in Hand.__dict__.items():
         if method_name.startswith('is_') and method.__doc__:
             samples[method_name] = Hand(method.__doc__.split())
-    for method_name, hand in sorted(samples.items(), key=lambda (k,v): v):
-        print "%-20s %s" % (method_name, hand)
+    for method_name, hand in sorted(samples.items(), key=itemgetter(1)):
+        print("%-20s %s" % (method_name, hand))
+        assert(getattr(hand, method_name)())
     import re
     # 1   | 5H 5C 6S 7S KD      | 2C 3S 8S 8D TD      | Player 2
     pattern = re.compile(
@@ -218,7 +225,7 @@ if __name__=='__main__':
     for line in __doc__.split('\n'):
         m = pattern.match(line)
         if m:
-            print line
+            print(line)
             num, p1, p2, winner = m.groups()
             player1 = Hand(p1.split())
             player2 = Hand(p2.split())
@@ -228,7 +235,7 @@ if __name__=='__main__':
 
 
 def hands(filename):
-    for line in file(filename):
+    for line in open(filename).readlines():
         cards = line.split()
         yield Hand(cards[:5]), Hand(cards[5:])
 

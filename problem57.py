@@ -33,7 +33,7 @@ def solution1(N=1000, verbose=False):
         if len(str(f.numerator)) != len(str(f.denominator)):
             n_gt_d += 1
         if verbose:
-            print "%4d %s %f" % (i+1, f, f)
+            print("%4d %s %f" % (i+1, f, f))
     return n_gt_d
 
 
@@ -46,7 +46,7 @@ def solution2(N=1000, verbose=False):
         if len(str(num)) != len(str(den)):
             n_gt_d += 1
         if verbose:
-            print "%4d %d/%d %f" % (i+1, num, den, float(num)/den)
+            print("%4d %d/%d %f" % (i+1, num, den, float(num)/den))
     return n_gt_d
 
 
@@ -66,7 +66,7 @@ def solution3(N=1000, verbose=False):
         if tpn != tpd:
             n_gt_d += 1
         if verbose:
-            print "%4d %d/%d %f" % (i+1, num, den, float(num)/den)
+            print("%4d %d/%d %f" % (i+1, num, den, float(num)/den))
     return n_gt_d
 
 
@@ -74,7 +74,7 @@ solution = solution3
 
 
 if __name__=='__main__':
-    print solution(N=10, verbose=True)
+    print(solution(N=10, verbose=True))
 
     def compare_times(N=1000):
         import time
@@ -82,7 +82,7 @@ if __name__=='__main__':
             start = time.time()
             result = f(N=N)
             duration = time.time() - start
-            print '%-6s%-32s %6dms' % (result, f.__name__, 1000*duration)
+            print('%-6s%-32s %6dms' % (result, f.__name__, 1000*duration))
 
     compare_times()
     #  153  solution3                             0ms

@@ -37,9 +37,9 @@ def collatz_sequence_length(n):
         return csl[n]
     elif n & 1:
         # if n is odd, next step will be even for sure
-        length = 2 + collatz_sequence_length((3 * n + 1)/2)
+        length = 2 + collatz_sequence_length((3 * n + 1) // 2)
     else:
-        length = 1 + collatz_sequence_length(n / 2)
+        length = 1 + collatz_sequence_length(n // 2)
     csl[n] = length
     return length
 

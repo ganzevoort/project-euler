@@ -23,7 +23,7 @@ def solution():
         C = A * B
         if ''.join(sorted(str(A) + str(B) + str(C))) == digits:
             products.add(C)
-            #print '{} x {} = {}'.format(A, B, C)
+            #print('{} x {} = {}'.format(A, B, C))
 
     # A x B  = C
     # assume A < B

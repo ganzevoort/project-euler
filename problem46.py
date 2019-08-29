@@ -36,10 +36,10 @@ def solution(show_result=False):
             if show_result:
                 x = is_goldbach(oc)
                 p = oc - 2*x^2
-                print '{0} = {1} + 2*{2}^2'.format(oc, p, x)
+                print('{0} = {1} + 2*{2}^2'.format(oc, p, x))
             continue
         else:
             return oc
 
 if __name__=='__main__':
-    print solution(show_result=True)
+    print(solution(show_result=True))

@@ -15,4 +15,4 @@ def fac(n):
 
 def solution():
     w, h = 20, 20
-    return fac(w+h) / (fac(w)*fac(h))
+    return fac(w+h) // (fac(w)*fac(h))

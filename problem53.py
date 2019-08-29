@@ -27,7 +27,7 @@ class Factorials(object):
             self.value[i] = fac
 
     def C(self, n, r):
-        return self.value[n] / (self.value[r] * self.value[n-r])
+        return self.value[n] // (self.value[r] * self.value[n-r])
 
 
 def solution1(N=100, M=1000000):
@@ -37,7 +37,7 @@ def solution1(N=100, M=1000000):
         for r in range(0, N):
             if f.C(n,r) > M:
                 biggies += 1
-                #print n,r,f.C(n,r)
+                #print(n,r,f.C(n,r))
     return biggies
 
 def solution2(N=100, M=1000000):
@@ -45,7 +45,7 @@ def solution2(N=100, M=1000000):
     biggies = 0
     for n in range(1,101):
         # C(n,r) == C(n, n-r), so symmetrical
-        for r in range(0, (N+1)/2):
+        for r in range(0, (N+1) // 2):
             if f.C(n,r) > M:
                 # also: C(n,r') > M for all r' where r <= r' <= (n-r)
                 biggies += (n-r) - r + 1

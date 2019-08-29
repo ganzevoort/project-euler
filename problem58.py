@@ -26,7 +26,8 @@ primes along both diagonals first falls below 10%?
 # On http://www.mathblog.dk/project-euler-58-primes-diagonals-spiral/
 # Kristian introduced me to the Miller-Rabin primality test which brought it
 # down to about 310ms. Wow.
-from miller_rabin import is_prime
+import primes
+import miller_rabin
 import itertools
 
 
@@ -37,17 +38,28 @@ import itertools
 #   top right has L^2 - 3*(L-1)
 # Number of numbers along both diagonals is 2*L-1.
 
-def solution(verbose=False):
+def solution(verbose=False, is_prime=miller_rabin.is_prime):
     primes = 0
     for L in itertools.count(3,2):
         corners = [L*L - (L-1)*i for i in (1,2,3)]
-        primes += len(filter(is_prime, corners))
+        primes += len(list(filter(is_prime, corners)))
         ratio = 100.0 * primes / (2*L-1)
         if verbose:
-            print "%5d: %5d/%5d = %6.3f" % (L, primes, 2*L-1, ratio)
+            print("%5d: %5d/%5d = %6.3f" % (L, primes, 2*L-1, ratio))
         if ratio < 10.0:
             return L
 
 
 if __name__=='__main__':
-    print solution(verbose=True)
+    print(solution(verbose=True))
+
+    def compare_times():
+        import time
+        for is_prime in primes.is_prime, miller_rabin.is_prime:
+            print('%-32s ' % is_prime.__module__, end='')
+            start = time.time()
+            result = solution(is_prime=is_prime)
+            duration = time.time() - start
+            print('%-6s %6dms' % (result, 1000*duration))
+
+    compare_times()

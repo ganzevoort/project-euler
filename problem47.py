@@ -26,8 +26,8 @@ def solution(N=4, show_result=False):
             if len(sequence)==N:
                 if show_result:
                     for n in sequence:
-                        print '{0} = {1}'.format(n,
-                                'x'.join(map(str,list(prime_divisors(n)))))
+                        print('{0} = {1}'.format(n,
+                                'x'.join(map(str,list(prime_divisors(n))))))
                 return sequence[0]
         else:
             sequence = []
@@ -35,4 +35,4 @@ def solution(N=4, show_result=False):
 
 if __name__=='__main__':
     for N in range(1,5):
-        print solution(N=N, show_result=True)
+        print(solution(N=N, show_result=True))

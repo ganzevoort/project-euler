@@ -19,7 +19,7 @@ from gmpy import is_square
 
 
 def pentagonal(n):
-    return n * (3*n-1) / 2
+    return n * (3*n-1) // 2
 
 def is_pentagonal(p):
     # p == n * (3*n-1) / 2, p in N, n in N, p>0, n>0

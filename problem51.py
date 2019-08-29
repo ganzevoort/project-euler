@@ -21,7 +21,7 @@ from primes import is_prime, prefetch_primes
 
 def family(pattern):
     digits = '123456789' if pattern[0]=='*' else '0123456789'
-    return filter(is_prime, [int(pattern.replace('*',d)) for d in digits])
+    return list(filter(is_prime, [int(pattern.replace('*',d)) for d in digits]))
 
 
 class Solver(object):
@@ -51,7 +51,7 @@ class Solver(object):
             pattern = prefix + '*'*suffix_length
             lwb = int(pattern.replace('*', '1' if pattern[0]=='*' else '0'))
             if self.best_sofar < lwb:
-                #print '%d < %s %d' % (self.best_sofar, pattern, lwb)
+                #print('%d < %s %d' % (self.best_sofar, pattern, lwb))
                 return
 
         for d in digits:
@@ -67,7 +67,7 @@ def solution():
     solver = Solver(N=8)
     for pattern in solver.all_patterns():
         if solver.check(pattern):
-            pass  # print pattern, family(pattern)
+            pass  # print(pattern, family(pattern))
 
     return solver.best_sofar
 

@@ -26,7 +26,7 @@ def solution():
             return chosen
         # after choosing a first digit, (len(digits)-1)! options remain
         f = factorial(len(digits)-1)
-        i = N / f
+        i = N // f
         chosen += digits[i]
         digits = digits[:i] + digits[i+1:]
         N %= f

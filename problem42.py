@@ -33,6 +33,7 @@ def is_triangle_word(word):
 
 def solution():
     words = [word.strip('"') for word in open('words.txt').read().split(',')]
-    return len(filter(is_triangle_word, words))
+    return len(list(filter(is_triangle_word, words)))
 
-#print is_triangle(word_value('SKY'))
+if __name__ == '__main__':
+    print(is_triangle(word_value('SKY')))

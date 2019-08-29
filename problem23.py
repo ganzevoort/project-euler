@@ -28,7 +28,7 @@ def is_abundant(n):
 
 def solution():
     N = 28123
-    abundant_numbers = filter(is_abundant, xrange(12, N))
+    abundant_numbers = list(filter(is_abundant, range(12, N)))
     abundant_set = set(abundant_numbers)
     def is_sum_of_two(c):
         for a in abundant_numbers:
@@ -36,4 +36,4 @@ def solution():
                 return False
             if c-a in abundant_set:
                 return True
-    return sum(c for c in xrange(1,N+1) if not is_sum_of_two(c))
+    return sum(c for c in range(1,N+1) if not is_sum_of_two(c))

@@ -41,19 +41,19 @@ def s4():
     N = 1001
     return (1 +
             4*sum(i*i for i in range(1,N-1,2)) +
-            5*((N-1)*(N-3)/2) +
+            5*((N-1)*(N-3) // 2) +
             10*N-10 )
 
 if __name__=='__main__':
     import time
     result1 = s1()
     for s in s1, s2, s3, s4:
-        print s.__name__,
+        print(s.__name__, end=' ')
         start = time.time()
         import time
         result = s()
         end = time.time()
-        print '%-32s %6dms' % (result, 1000*(end-start))
+        print('%-32s %6dms' % (result, 1000*(end-start)))
         assert result==result1
 
 solution = s4

@@ -38,7 +38,7 @@ MAX_LYCHREL_STEPS = 50
 def is_lychrel(n):
     r = int(''.join(reversed(str(n))))
     for i in range(MAX_LYCHREL_STEPS):
-        #print "%d: %d + %d = %d" % (i+1, n, r, n+r)
+        #print("%d: %d + %d = %d" % (i+1, n, r, n+r))
         n += r
         r = int(''.join(reversed(str(n))))
         if n == r:
@@ -47,5 +47,5 @@ def is_lychrel(n):
 
 
 def solution():
-    return len(filter(is_lychrel, range(1,10000)))
+    return len(list(filter(is_lychrel, range(1,10000))))
 

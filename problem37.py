@@ -25,7 +25,7 @@ def is_left_truncatable(p):
 def right_truncatables():
     primes = list(get_primes(10))
     while primes:
-        primes = filter(is_prime, (10*p+d for p in primes for d in (1,3,7,9)))
+        primes = list(filter(is_prime, (10*p+d for p in primes for d in (1,3,7,9))))
         for p in primes:
             yield p
 

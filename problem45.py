@@ -16,11 +16,11 @@ import itertools
 
 def triangles():
     for n in itertools.count(1):
-        yield n*(n+1)/2
+        yield n*(n+1) // 2
 
 def pentagonals():
     for n in itertools.count(1):
-        yield n*(3*n-1)/2
+        yield n*(3*n-1) // 2
 
 def hexagonals():
     for n in itertools.count(1):
@@ -53,9 +53,12 @@ def is_hexagonal(h):
 def check(generator, tester, length=100, sample=[]):
     length = max(length, len(sample))
     generated = list(itertools.islice(generator(), length))
-    filtered = filter(tester, range(1, generated[-1]+1))
-    assert generated[:len(sample)] == sample
-    assert generated == filtered
+    filtered = list(filter(tester, range(1, generated[-1]+1)))
+    try:
+        assert generated[:len(sample)] == sample
+        assert generated == filtered
+    except:
+        import pdb; pdb.set_trace()
 
 
 
@@ -65,8 +68,8 @@ def solution(show_result=False):
         # so every hexagonal is also triangle, no need to test that.
         if is_pentagonal(i):
             if show_result:
-                print 'T{0} = P{1} = H{2} = {3}'.format(
-                        is_triangle(i), is_pentagonal(i), is_hexagonal(i), i)
+                print('T{0} = P{1} = H{2} = {3}'.format(
+                        is_triangle(i), is_pentagonal(i), is_hexagonal(i), i))
             elif i > 40755:
                 return i
 
@@ -74,5 +77,5 @@ if __name__=='__main__':
     check(triangles, is_triangle, sample=[1, 3, 6, 10, 15])
     check(pentagonals, is_pentagonal, sample=[1, 5, 12, 22, 35])
     check(hexagonals, is_hexagonal, sample=[1, 6, 15, 28, 45])
-    print 'checks OK'
-    print solution(show_result=True)
+    print('checks OK')
+    print(solution(show_result=True))

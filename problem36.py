@@ -19,7 +19,7 @@ def binary_palindromic(n):
 
 def decimal_palindromes(max):
     for length in itertools.count(1):
-        half_length = (length+1)/2
+        half_length = (length+1) // 2
         x = pow(10,half_length-1)
         # starting digit should be odd, as result has to be odd
         for d in range(1,10,2):

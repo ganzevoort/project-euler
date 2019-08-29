@@ -87,6 +87,24 @@ class PrimeFactory4(PrimeFactory2):
         while self.horizon < N:
             self.fetch_one()
 
+    def is_prime(self, q):
+        if q in self.prime_set:
+            return True
+        if q < self.horizon:
+            return False
+        for p in self.prime_list:
+            if q % p == 0:
+                return False
+            if p * p > q:
+                return True
+        while True:
+            self.fetch_one()
+            p = self.horizon
+            if q % p == 0:
+                return False
+            if p * p > q:
+                return True
+
 
 _factory = PrimeFactory4()
 is_prime = _factory.is_prime
@@ -100,7 +118,7 @@ def gcd(x, y):
     return x
 
 def lcm(x, y):
-    return x * y / gcd(x,y)
+    return x * y // gcd(x,y)
 
 def prime_divisors(n):
     for p in get_primes():
@@ -111,7 +129,7 @@ def prime_divisors(n):
             return
         while n % p == 0:
             yield p
-            n /= p
+            n //= p
 
 def divisors(n):
     divisors = set([1])
@@ -128,5 +146,5 @@ if __name__=='__main__':
     assert S == sum(get_primes(N))
     assert S == sum(filter(is_prime, range(2,N+1)))
     end = time.time()
-    print '%5dms' % (1000*(end-start))
+    print('%5dms' % (1000*(end-start)))
 

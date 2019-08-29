@@ -18,7 +18,7 @@ from primes import is_prime, get_primes
 
 
 def unusual_sequence(digits):
-    primes = filter(is_prime, set((int(''.join(p)) for p in permutations(digits))))
+    primes = list(filter(is_prime, set((int(''.join(p)) for p in permutations(digits)))))
     if len(primes) < 3:
         return None
     primes.sort()
@@ -36,10 +36,10 @@ def solution(show_result=False):
         sequence = unusual_sequence(attempt)
         if sequence:
             if show_result:
-                print sequence
+                print(sequence)
             if sequence[0]!=1487:
                 return ''.join(map(str, sequence))
     pass
 
 if __name__=='__main__':
-    print solution(show_result=True)
+    print(solution(show_result=True))

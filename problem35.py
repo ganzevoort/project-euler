@@ -22,4 +22,4 @@ def is_circular(p):
 
 def solution():
     N = 1000000
-    return len(filter(is_circular, get_primes(N)))
+    return len(list(filter(is_circular, get_primes(N))))
