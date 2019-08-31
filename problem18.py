@@ -17,8 +17,7 @@ triangle containing one-hundred rows; it cannot be solved by brute force,
 and requires a clever method! ;o)
 """
 
-def solution():
-    grid_text = """
+def solution(grid_text="""
 
                                         75
                                       95  64
@@ -36,7 +35,7 @@ def solution():
               63  66  04  68  89  53  67  30  73  16  69  87  40  31
             04  62  98  27  23  09  70  98  73  93  38  53  60  04  23
 
-        """
+        """):
     grid = list(filter(len,
             [list(map(int,line.split())) for line in grid_text.split('\n')]))
 
