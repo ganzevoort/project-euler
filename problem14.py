@@ -24,7 +24,7 @@ def collatz_sequence(n):
     cs = [n]
     while n > 1:
         if n % 2 == 0:
-            n = n / 2
+            n = n // 2
         else:
             n = 3 * n + 1
         cs.append(n)
@@ -37,6 +37,7 @@ def collatz_sequence_length(n):
         return csl[n]
     elif n & 1:
         # if n is odd, next step will be even for sure
+        #length = 1 + collatz_sequence_length(3 * n + 1)
         length = 2 + collatz_sequence_length((3 * n + 1) // 2)
     else:
         length = 1 + collatz_sequence_length(n // 2)
@@ -44,5 +45,15 @@ def collatz_sequence_length(n):
     return length
 
 
-def solution(N = 1000000):
+def solution(N=1000000):
     return max(range(1,N), key=collatz_sequence_length)
+
+
+if __name__ == '__main__':
+    print(collatz_sequence(13))
+    assert(collatz_sequence_length(13) == len(collatz_sequence(13)))
+    #for n in range(1,10000):
+    #    print(f"{n}: csl:{collatz_sequence_length(n)}")
+    print(f"   1000: {solution(1000)}")
+    print(f"1000000: {solution(1000000)}")
+    print(len(csl))

@@ -1,10 +1,14 @@
 """
-In the 2020 grid below, four numbers along a diagonal line have been marked in red.
+In the 20x20 grid below, four numbers along a diagonal line have
+been marked in red.
+See https://projecteuler.net/problem=11 for actual red.
 
-The product of these numbers is 26  63  78  14 = 1788696.
+The product of these numbers is 26 x 63 x 78 x 14 = 1788696.
 
-What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 2020 grid?
+What is the greatest product of four adjacent numbers in the same
+direction (up, down, left, right, or diagonally) in the 20x20 grid?
 """
+
 
 def solution():
     grid_text = """
@@ -50,9 +54,11 @@ def solution():
         for x in range(width-3):
             for y in range(height-3):
                 yield [(x+3-i,y+i) for i in range(4)]
+
     def mul(seq):
         product = 1
         for i in seq:
             product *= i
         return product
+
     return max([mul([grid[y][x] for x,y in s]) for s in segments()])

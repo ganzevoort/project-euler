@@ -17,6 +17,7 @@ triangle containing one-hundred rows; it cannot be solved by brute force,
 and requires a clever method! ;o)
 """
 
+
 def solution(grid_text="""
 
                                         75

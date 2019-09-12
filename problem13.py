@@ -1,6 +1,8 @@
 """
-Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+Work out the first ten digits of the sum of the following one-hundred
+50-digit numbers.
 """
+
 
 def solution():
     return str(sum(map(int, """
@@ -105,4 +107,3 @@ def solution():
         20849603980134001723930671666823555245252804609722
         53503534226472524250874054075591789781264330331690
         """.split())))[:10]
-

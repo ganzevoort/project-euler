@@ -12,6 +12,7 @@ contains 20 letters. The use of "and" when writing out numbers is
 in compliance with British usage.
 """
 
+
 words = {
         1: 'one',
         2: 'two',
@@ -42,6 +43,7 @@ words = {
         90: 'ninety',
 }
 
+
 def say(n):
     thousands = n // 1000
     hundreds = (n % 1000) // 100
@@ -63,5 +65,11 @@ def say(n):
     in_letters +=  words[n]
     return in_letters
 
-def solution():
-    return sum(len(say(i)) for i in range(1,1001))
+
+def solution(N=1000):
+    return sum(len(say(i)) for i in range(1,N+1))
+
+
+if __name__ == '__main__':
+    for i in range(1,1001):
+        print(say(i))
