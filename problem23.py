@@ -22,9 +22,11 @@ the sum of two abundant numbers.
 
 from primes import divisors
 
+
 def is_abundant(n):
     proper_divisors = divisors(n)[:-1]
     return sum(proper_divisors) > n
+
 
 def solution():
     N = 28123

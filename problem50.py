@@ -16,35 +16,29 @@ import itertools
 from primes import is_prime, get_primes
 
 
-class PrimeSequenceGenerator(object):
-    def __init__(self, N):
-        self.N = N
-        self.primes = list(get_primes(N))
+def solution(N=1000000, verbose=False):
+    primes = list(get_primes(N))
 
-    def find_longest_sequence_value(self, start=0, min_length=1, result=None):
-        """ result is best sofar, is sum(S) for some sequence S.
-        Try and find a longer sequence, so min_length is len(S)+1.
-        First try all sequences starting at start, then recurse with start+1.
-        """
-        subtotal = sum(self.primes[start : start + min_length])
-        if subtotal >= self.N:
+    S = []
+    # result is best sofar, is sum(S) for some sequence S.
+    # Try and find a longer sequence
+    for start in itertools.count(0):
+        subtotal = sum(primes[start : start + len(S)])
+        if subtotal >= N:
             # longer sequences starting at start or higher by definition yield
             # out-of-range results, so we're done here.
-            return result
-        for length in itertools.count(min_length):
-            subtotal += self.primes[start+length]
-            if subtotal >= self.N:
+            return sum(S)
+        for length in itertools.count(len(S) + 1):
+            subtotal += primes[start + length - 1]
+            if subtotal >= N:
                 # Can't find a better result at start, move up to start+1
-                return self.find_longest_sequence_value(
-                        start+1, min_length+1, result)
+                break
             if is_prime(subtotal):
-                # Improvement: result=sum(S), length=len(S)
-                min_length = length
-                result = subtotal
+                # Improvement
+                S = primes[start : start + length]
+                if verbose:
+                    print('{} = {} ({})'.format(sum(S), S, len(S)))
 
 
-def solution():
-    N = 1000000
-    generator = PrimeSequenceGenerator(N)
-    return generator.find_longest_sequence_value()
-
+if __name__ == '__main__':
+    print(solution(N=1000, verbose=True))

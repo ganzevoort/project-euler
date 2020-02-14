@@ -8,16 +8,16 @@ values n = 0 to 39. However, when n = 40, 402 + 40 + 41 = 40(40 + 1)
 + 41 is divisible by 41, and certainly when n = 41, 41^2 + 41 + 41 is
 clearly divisible by 41.
 
-Using computers, the incredible formula  n^2 + 79n + 1601 was discovered,
+Using computers, the incredible formula  n^2 - 79n + 1601 was discovered,
 which produces 80 primes for the consecutive values n = 0 to 79. The
-product of the coefficients, 79 and 1601, is 126479.
+product of the coefficients, -79 and 1601, is -126479.
 
 Considering quadratics of the form:
 
     n^2 + an + b, where |a| < 1000 and |b| < 1000
 
     where |n| is the modulus/absolute value of n
-    e.g. |11| = 11 and |4| = 4
+    e.g. |11| = 11 and |-4| = 4
 
 Find the product of the coefficients, a and b, for the quadratic
 expression that produces the maximum number of primes for consecutive
@@ -28,13 +28,14 @@ values of n, starting with n = 0.
 import itertools
 from primes import is_prime, get_primes
 
+
 def quadratics_length(a, b):
     for n in itertools.count(1):
         if not is_prime(n*n + a*n + b):
             return n
 
-def solution():
-    N = 1000
+
+def solution(N = 1000, verbose=False):
     best_length, best_a, best_b = 0, 0, 0
     # b can't be negative, and for n=0, it has to be a prime
     for b in reversed(list(get_primes(N))):
@@ -50,4 +51,12 @@ def solution():
                 length = quadratics_length(a, b)
                 if length > best_length:
                     best_length, best_a, best_b = length, a, b
+                    if verbose:
+                        print(f"n^2 + {a}n + {b}: {length}  (ab={a*b})")
     return best_a * best_b
+
+
+if __name__ == '__main__':
+    print(f"n^2 + n + 41: {quadratics_length(1,41)}")
+    print(f"n^2 - 79n + 1601: {quadratics_length(-79,1601)}")
+    print(solution(verbose=True))
