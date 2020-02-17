@@ -19,12 +19,13 @@ from collections import namedtuple
 from itertools import combinations
 from primes import get_primes
 from miller_rabin import is_prime
+from caching import CachingDecorator
 
 
 # This is an exercise in optimization.
 #
 # First, we make sure to do as little work as possible especially
-# for bigger prime numbers.  We keep a list of candidate sets pet
+# for bigger prime numbers.  We keep a list of candidate sets per
 # length. For each prime, we try to grow each candidate sets by
 # adding that prime to the candidate, checking for the catprime
 # criterium. If we already have a result, candidate sets that cannot
@@ -49,10 +50,17 @@ from miller_rabin import is_prime
 # In phase2, is_catprime is inlined (see cat_seen, cat_twins sets)
 # to reduce the overhead of the functioncall (adds up to 0.8s).
 #
-# The result of this is solution2(). It's about 4 times in lines
+# The result of this is solution2(). It's almost 4 times in lines
 # of code, and much more complex. Unless speed is absolutely really
 # really really more important than anything else, I'd use solution1.
 
+
+# Unfortunately, the overhead in the CachingDecorator is measurable
+# @CachingDecorator
+# def is_catprime(p, q):
+#     strp, strq = str(p), str(q)
+#     return is_prime(int(strp + strq)) and is_prime(int(strq + strp))
+# is_catprime.cache_hashkey = mul
 
 _history = dict()
 def is_catprime(p, q):
@@ -65,6 +73,13 @@ def is_catprime(p, q):
         result = is_prime(int(strp + strq)) and is_prime(int(strq + strp))
         _history[hashed] = result
         return result
+def _history_reset():
+    global _history
+    _history = dict()
+is_catprime.cache_reset = _history_reset
+def _history_show():
+    print("cache size: {}".format(len(_history)))
+is_catprime.cache_show = _history_show
 
 
 CPSet = namedtuple('CPSet', ['sum', 'primes'])
@@ -203,12 +218,14 @@ if __name__=='__main__':
         N = int(sys.argv[1])
     except (IndexError, ValueError):
         N = 4
+    assert(N > 2)
     verbose = True
     for solution in solution2, solution1:
-        _history = dict()
+        is_catprime.cache_reset()
         start = time.time()
         print("{}(N={}, verbose={})".format(solution.__name__, N, verbose))
         result = solution(N=N, verbose=verbose)
         totaltime = time.time() - start
+        is_catprime.cache_show()
         print("{} => {}".format("%.3fs" % totaltime, result))
         print()
