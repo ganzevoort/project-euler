@@ -23,7 +23,8 @@ fractions for d ≤ 1,000,000?
 import time
 import math
 from fractions import Fraction
-from primes import gcd as HCF, prime_divisors
+from primes import gcd as HCF
+from pyprimesieve import factorize
 
 
 def reduced_proper_fractions(N):
@@ -63,13 +64,9 @@ def solution2(N=1000000, verbose=False):
 def phi(n):
     # problem69.phi is a slower implementation
     # https://en.wikipedia.org/wiki/Euler%27s_totient_function#Computing_Euler's_totient_function
-    factors = set(prime_divisors(n))
-    # tried:
-    #   n * math.prod(f-1 for f in factors) // math.prod(factors)
-    # but that isn't faster
     x = n
-    for f in factors:
-        x = (x * (f-1) ) // f
+    for factor, power in factorize(n):
+        x = (x * (factor-1) ) // factor
     return x
 
 

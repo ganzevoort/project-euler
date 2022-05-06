@@ -1,5 +1,6 @@
 import itertools
 import math
+import pyprimesieve
 
 
 class PrimeFactory(object):
@@ -106,7 +107,62 @@ class PrimeFactory4(PrimeFactory2):
                 return True
 
 
-_factory = PrimeFactory4()
+class PrimeFactory5(PrimeFactory):
+    def __init__(self):
+        self.prime_list = []
+        self.prime_set = set()
+        self.horizon = 0
+
+    def fetch_one(self):
+        p = pyprimesieve.primes_nth(len(self.prime_list)+1)
+        self.prime_list.append(p)
+        self.prime_set.add(p)
+        self.horizon = p
+        return p
+
+    def prefetch(self, N):
+        if N > self.horizon*2:
+            self.prime_list = pyprimesieve.primes(N)
+            self.prime_set = set(self.prime_list)
+            self.horizon = N
+            return
+        while self.horizon < N:
+            self.fetch_one()
+
+    def get_primes(self, N=None):
+        if N is None:
+            start_index = 0
+            while True:
+                end_index = len(self.prime_list)
+                for p in self.prime_list[start_index:end_index]:
+                    yield p
+                start_index = end_index
+                self.prefetch(max(self.horizon * 3, 3))
+        self.prefetch(N)
+        for p in self.prime_list:
+            if p >= N:
+                return
+            yield p
+
+    def is_prime(self, q):
+        if q in self.prime_set:
+            return True
+        if q < self.horizon:
+            return False
+        for p in self.prime_list:
+            if q % p == 0:
+                return False
+            if p * p > q:
+                return True
+        self.prefetch(max(int(math.sqrt(q))+1, self.horizon*3))
+        for p in self.prime_list:
+            if q % p == 0:
+                return False
+            if p * p > q:
+                return True
+
+
+_factory = PrimeFactory5()
 is_prime = _factory.is_prime
 get_primes = _factory.get_primes
 prefetch_primes = _factory.prefetch
@@ -120,16 +176,11 @@ def gcd(x, y):
 def lcm(x, y):
     return x * y // gcd(x,y)
 
+
 def prime_divisors(n):
-    for p in get_primes():
-        if p*p > n:     # `p*p > n` instead of `p > math.sqrt(n)`
-                        # cuts ~25% of running time of problem47
-            if n > 1:
-                yield n
-            return
-        while n % p == 0:
-            yield p
-            n //= p
+    for factor, power in pyprimesieve.factorize(n):
+        for _ in range(power):
+            yield factor
 
 def divisors(n):
     divisors = set([1])

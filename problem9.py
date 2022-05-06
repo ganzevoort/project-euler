@@ -14,7 +14,7 @@ Find the product abc.
 def solution(N=1000):
     for a in range(1, N):
         for b in range(a+1, N):
-            c = N - a-b
+            c = N - a - b
             if c <= b:
                 break
             if a*a + b*b == c*c:

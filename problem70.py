@@ -99,6 +99,8 @@ def solution2(N=10000000, verbose=False):
 
 
 def solution3(N=10000000, verbose=False):
+    #from primes import prefetch_primes
+    #prefetch_primes(N)
     # solution2 tried to minimise the search space, but still too
     # much time is spent calculating φ(n).
     # If n == p*q, where p and q are prime, then φ(n) is the length
@@ -112,7 +114,7 @@ def solution3(N=10000000, verbose=False):
         print('-------------------------------------------------------')
     t0 = time.time()
     lowest_prime = 2
-    for p in reversed(list(get_primes(math.sqrt(N)))):
+    for p in reversed(list(get_primes(int(math.sqrt(N))))):
         if p < lowest_prime:
             break
         for q in reversed(list(get_primes(N // p))):

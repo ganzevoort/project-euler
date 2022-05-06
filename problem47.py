@@ -15,7 +15,7 @@ factors. What is the first of these numbers?
 
 
 import itertools
-from primes import get_primes, prime_divisors
+from primes import prime_divisors
 
 
 def solution(N=4, show_result=False):
