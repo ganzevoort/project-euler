@@ -15,8 +15,8 @@ indicated in bold red and is equal to 2427.
         805  732  524 > 37 >331
 
 Find the minimal path sum from the top left to the bottom right by
-only moving right and down in matrix.txt (right click and "Save
-Link/Target As..."), a 31K text file containing an 80 by 80 matrix.
+only moving right and down in matrix.txt, a 31K text file containing
+an 80 by 80 matrix.
 """
 
 
@@ -51,13 +51,13 @@ def minimal_path_sum(matrix, verbose=False):
         for y in range(height):
             previous = []
             if x > 0:
-                previous.append(minimal_sums[x-1][y])
+                previous.append(minimal_sums[y][x-1])
             if y > 0:
-                previous.append(minimal_sums[x][y-1])
+                previous.append(minimal_sums[y-1][x])
             if previous:
-                minimal_sums[x][y] = min(previous) + matrix[x][y]
+                minimal_sums[y][x] = min(previous) + matrix[y][x]
             else:
-                minimal_sums[x][y] = matrix[x][y]
+                minimal_sums[y][x] = matrix[y][x]
     result = minimal_sums[height-1][width-1]
     if verbose > 1:
         print("matrix:")
@@ -73,7 +73,7 @@ def read_matrix(filename):
 
 
 def solution(verbose=False):
-    return minimal_path_sum(read_matrix('matrix.txt'), verbose=verbose)
+    return minimal_path_sum(read_matrix('p081_matrix.txt'), verbose=verbose)
 
 
 if __name__ == '__main__':
