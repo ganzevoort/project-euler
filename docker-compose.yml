@@ -1,0 +1,11 @@
+version: '2.3'
+
+services:
+  euler:
+    build:
+      context: .
+    environment:
+      TZ: 'Europe/Amsterdam'
+    volumes:
+      - .:/code
+        #command: euler.py
